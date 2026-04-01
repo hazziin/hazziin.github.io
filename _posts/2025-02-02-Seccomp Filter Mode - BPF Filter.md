@@ -183,4 +183,8 @@ struct sock_filter filter[] = {
 `return ALLOW`로 덮어썼더니 `prctl()`에서 -1이 리턴되지 않고 잘 실행되어서 문제를 해결할 수 있었다.
 
 만약 filter 부분을 덮어쓸 일이 있다면 참고할 것!
+
+---
+<br>
+
 <br>
