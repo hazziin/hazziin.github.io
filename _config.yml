@@ -1,0 +1,41 @@
+# Site settings
+title:          hazziin
+description:    "Minimal Jekyll theme for storytellers"
+baseurl:        ""
+url:            "https://hazziin.github.io"
+
+
+# Author
+author:
+  name:         hazziin
+  url:          "https://hazziin.github.io"
+  email:        hajin0708@gmail.com
+
+# Build settings
+markdown:       kramdown
+kramdown:
+  hard_wrap: true
+include:
+  - _pages
+
+# Assets
+sass:
+  sass_dir:     _sass
+  style:        compressed
+
+# Gems
+plugins:
+  - jekyll-feed
+  - jekyll-paginate
+  - jekyll-seo-tag
+  # - jemoji #Uncomment this to allow emoji in your post
+
+# Permalinks
+permalink:      /:year-:month-:day/:title
+paginate:       5
+
+# Excludes
+exclude: [ Gemfile, Gemfile.lock, tale.gemspec ]
+
+# Disqus (Set to your disqus id)
+disqus:         jekyll-tale
