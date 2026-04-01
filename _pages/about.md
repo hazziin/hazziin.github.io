@@ -7,7 +7,7 @@ permalink: /about/
 ---
 
 Hi, I'm **Hajin Bae**, a security researcher at Theori, also known as **hazziin**.
-I'm interested in information security, particularly web and Linux-based system security.
+I'm interested in information security, particularly web and Linux-based system security. 
 
 
 ## Work Experience
