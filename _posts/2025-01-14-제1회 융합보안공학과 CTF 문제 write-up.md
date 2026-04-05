@@ -3,6 +3,7 @@ layout: post
 title: "제1회 융합보안공학과 CTF 문제 write-up"
 author: "hazziin"
 tags: [I.Sly()]
+excerpt_separator: <!--more-->
 ---
 
 2022년 말 I.Sly()에서 출제했던 학과 CTF 문제를 백업 겸 + 돌아볼 겸 정리하려고 한다.
@@ -11,7 +12,7 @@ tags: [I.Sly()]
 # Pwn
 ## [Pwn] NICS
 
-Network Interface Checking Service! 
+Network Interface Checking Service! <!--more-->
 
 ```c
 int __cdecl main(int argc, const char **argv, const char **envp)
