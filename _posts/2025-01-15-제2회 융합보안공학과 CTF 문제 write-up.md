@@ -3,6 +3,7 @@ layout: post
 title: "제2회 융합보안공학과 CTF 문제 write-up"
 author: "hazziin"
 tags: [I.Sly()]
+excerpt_separator: <!--more-->
 ---
 
 2023년 말에 출제했던 문제 풀이 백업!
@@ -12,7 +13,7 @@ tags: [I.Sly()]
 # Pwn
 
 ## [Pwn] babybof
-Can you BOF it?
+Can you BOF it? <!--more-->
 
 <img src="{{ '/assets/isly_writeup/img04.png' | relative_url }}" width="400" class="img-left">
 

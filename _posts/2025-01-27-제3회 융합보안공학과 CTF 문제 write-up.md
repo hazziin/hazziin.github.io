@@ -3,6 +3,7 @@ layout: post
 title: "제3회 융합보안공학과 CTF 문제 write-up"
 author: "hazziin"
 tags: [I.Sly()]
+excerpt_separator: <!--more-->
 ---
 
 3회 CTF 문제 라업~~~
@@ -11,7 +12,7 @@ tags: [I.Sly()]
 
 # Pwn
 ## [Pwn] Simple Calc
-simple calc but you must not hack it
+simple calc but you must not hack it <!--more-->
 
 ```py
 #!/usr/bin/python3
