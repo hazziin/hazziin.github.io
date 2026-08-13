@@ -45,3 +45,13 @@ pre code {
             user-select: none;
   }
 }
+
+// Per-block opt-out of the line number gutter. Line numbers are on globally
+// (see `line_numbers` in _config.yml), so hide them with a class IAL placed
+// directly after the closing fence:
+//
+//   {: .no-lineno}
+//
+.no-lineno .rouge-gutter {
+  display: none;
+}

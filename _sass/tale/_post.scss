@@ -65,6 +65,33 @@
     margin-top: 0.3rem;
   }
 
+  // Caption under a code block, mirroring the image caption above. Write the
+  // caption as its own italic-only paragraph right after the block:
+  //
+  //   ```php
+  //   ...
+  //   ```
+  //   {: data-lines="1740 1798"}
+  //
+  //   *정상 요청 시*
+  //
+  // `em:only-child` keeps this from catching ordinary paragraphs that merely
+  // start with emphasis.
+  .highlighter-rouge + p > em:only-child {
+    color: $default-tint;
+    display: block;
+    font-family: $sans-serif;
+    font-size: 0.9rem;
+    font-style: normal;
+    text-align: center;
+  }
+
+  // Pull the caption up against the block. Degrades to the normal 1rem gap
+  // wherever :has() is unsupported.
+  .highlighter-rouge:has(+ p > em:only-child) .highlight {
+    margin-bottom: 0.3rem;
+  }
+
   // CSS for making emoji inline
   img.emoji {
     display: inline-block;

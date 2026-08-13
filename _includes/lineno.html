@@ -1,0 +1,44 @@
+<script>
+// Renumber Rouge's line-number gutter for code blocks that quote external source.
+//
+// Usage in a post, after a fenced code block:
+//   {: data-lines="1740 1798"}
+//
+// Rouge always numbers from 1 and kramdown caches its highlighter options per
+// document, so a per-block start line can't be set at build time. Instead the
+// gutter text is rewritten here. Each line of the block that is exactly "..."
+// renders as "..." in the gutter and starts the next segment, taking its first
+// number from the next value in data-lines.
+(function () {
+  'use strict';
+
+  function renumber(block) {
+    var gutter = block.querySelector('pre.lineno');
+    var code = block.querySelector('td.rouge-code pre');
+    if (!gutter || !code) return;
+
+    var starts = (block.getAttribute('data-lines') || '').trim().split(/\s+/).map(Number);
+    if (!starts.length || !isFinite(starts[0])) return;
+
+    var lines = code.textContent.replace(/\n$/, '').split('\n');
+    var out = [];
+    var seg = 0;
+    var n = starts[0];
+
+    for (var i = 0; i < lines.length; i++) {
+      if (lines[i].trim() === '...') {
+        out.push('...');
+        seg += 1;
+        n = starts[seg]; // undefined once data-lines runs out -> blank gutter
+      } else {
+        out.push(isFinite(n) ? n++ : '');
+      }
+    }
+
+    gutter.textContent = out.join('\n') + '\n';
+  }
+
+  var blocks = document.querySelectorAll('[data-lines]');
+  for (var i = 0; i < blocks.length; i++) renumber(blocks[i]);
+})();
+</script>
