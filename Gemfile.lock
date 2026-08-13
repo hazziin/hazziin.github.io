@@ -75,6 +75,8 @@ GEM
       sass-embedded (~> 1.75)
     jekyll-seo-tag (2.8.0)
       jekyll (>= 3.8, < 5.0)
+    jekyll-sitemap (1.4.0)
+      jekyll (>= 3.7, < 5.0)
     jekyll-watch (2.2.1)
       listen (~> 3.0)
     jemoji (0.13.0)
@@ -170,6 +172,7 @@ PLATFORMS
 DEPENDENCIES
   bigdecimal
   bundler (~> 2.0)
+  jekyll-sitemap
   jemoji
   rake (~> 12.3.3)
   tale!

@@ -28,6 +28,7 @@ sass:
 
 # Gems
 plugins:
+  - jekyll-sitemap
   - jekyll-feed
   - jekyll-paginate
   - jekyll-seo-tag
@@ -42,3 +43,5 @@ exclude: [ Gemfile, Gemfile.lock, tale.gemspec ]
 
 # Disqus (Set to your disqus id)
 disqus:         jekyll-tale
+
+google_site_verification: zXwMUZkB1AbY0__4p7CZheFfiY6XAMM4_BhQXjJ6Ekg
