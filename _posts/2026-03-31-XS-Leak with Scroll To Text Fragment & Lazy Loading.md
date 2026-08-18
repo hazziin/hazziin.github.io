@@ -32,10 +32,11 @@ XS-Search는 XS-Leak의 일부로, SOP를 우회해 공격 대상 오리진의 �
 **Lazy Loading(지연 로딩)**이란 지금 당장 필요하지 않은 리소스는 나중에 로드하는 것을 의미한다. Lazy Loading 사용 시 현재 화면에 보이는 리소스만 로드되기 때문에 속도 측면에서 큰 이점을 가지게 된다.
 만약 이미지에 Lazy Loading을 적용하고 싶다면 아래와 같이 쓰면 된다.
 
-#### 예시 코드
+**예시 코드**
 ``` html
 <img src="image.jpg" loading="lazy" />
 ```
+{: .no-lineno}
 
 # Scroll To Text Fragment
 Scroll To Text Fragment는 Chromium 계열 text fragment 기능으로, 특정 텍스트 조각이 있는 곳으로 바로 스크롤+강조하는 기능을 제공한다. 관련 문서에 따르면 주석에 의존하지 않고 특정 부분을 바로 보여주고 마크업하기 위해서 만들었다고 한다.
@@ -43,10 +44,11 @@ STTF는 특별히 웹해킹 스킬은 아닌 것 같다. 그냥 기능 정도? �
 
 요 기능은 URL 맨 뒤에 `#:~:text={text}`와 같이 사용할 수 있다. 만약 URL에 아래와 같이 입력하게 되면 해당 텍스트가 있는 곳으로 바로 스크롤되고 강조된다.
 
-#### 사용 예시
+**사용 예시**
 ```
 https://example.com/#:~:text=Example
 ```
+{: .no-lineno}
 <img src="{{ '/assets/260331/img01.png' | relative_url }}" alt="XS-Leak Overview" width="700">
 *대충 이렇게 스크롤+강조됨...*
 

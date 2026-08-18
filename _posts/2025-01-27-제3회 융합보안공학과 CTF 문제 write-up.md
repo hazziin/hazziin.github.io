@@ -52,6 +52,7 @@ if __name__ == "__main__":
 ```py
 __builtins__.__dict__['__impor'+'t__']('o'+'s').__dict__['syste'+'m']('cat fla*')
 ```
+{: .no-lineno}
 
 ## [Pwn] Everytime
 
@@ -283,7 +284,3 @@ p.sendlineafter(">>> ", "3")
  
 p.interactive()
 ```
----
-<br>
-
-<br>

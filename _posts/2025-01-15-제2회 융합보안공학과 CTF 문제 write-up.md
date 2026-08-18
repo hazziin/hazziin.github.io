@@ -282,7 +282,3 @@ p.send(payload)
  
 p.interactive()
 ```
----
-<br>
-
-<br>

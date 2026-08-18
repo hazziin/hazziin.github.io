@@ -43,6 +43,7 @@ Seccomp 모드는 크게 2가지가 있다.
 ```c
 prctl(PR_SET_SECCOMP, mode, &sock_fprog );
 ```
+{: .no-lineno}
 `prctl()`은 프로세스를 관리하기 위한 함수로, seccomp 설정에도 활용할 수 있다. 위와 같이 첫 번째 인자로 `PR_SET_SECCOMP`를 주면 되는데, 이는 매크로 값 22를 가진다.
 filter mode의 경우, 세 번째 인자로 `sock_fprog` 구조체의 포인터가 들어가게 된다.
 
@@ -183,8 +184,3 @@ struct sock_filter filter[] = {
 `return ALLOW`로 덮어썼더니 `prctl()`에서 -1이 리턴되지 않고 잘 실행되어서 문제를 해결할 수 있었다.
 
 만약 filter 부분을 덮어쓸 일이 있다면 참고할 것!
-
----
-<br>
-
-<br>

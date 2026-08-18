@@ -195,6 +195,7 @@ _IO_new_file_write (_IO_FILE *f, const void *data, _IO_ssize_t n)
 ```c
 write (f->_fileno, _IO_write_base, _IO_write_ptr - _IO_write_base)
 ```
+{: .no-lineno}
 
 따라서 프로그램 종료 전 `fflush(stdout)`을 수행하고 있으니, `stdout` 구조체를 조작하면 libc base를 leak할 수 있겠다.
 
@@ -229,8 +230,3 @@ rsp, rbp가 꼬일 거라는 생각을 전혀 하지 않고 '인자가 제대로
 그런데 쓰면서 깨달은 건데... 어차피 rsp 주소만 높일 거면 계속 ret을 반복하도록 해도 되지 않았을까? 굳이 add rsp를 해줄 필요까진 없었을 것 같다.
 
 +) ROP 시 `system()`을 쓰면 잘 터지기도 하고, `do_system()`에서 또 bss를 벗어나며 세그폴트가 뜬다. 그래서 `execve()` 애용 중 ㅎㅎ
-
----
-<br>
-
-<br>

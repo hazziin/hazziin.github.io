@@ -88,6 +88,7 @@ Large bin은 여러 크기의 청크를 하나의 bin에서 관리한다. 따라
   size_t *g2 = malloc(0x18);
   printf("Once again, allocate a guard chunk to prevent consolidate\n");
 ```
+{: data-lines="41"}
 1\. 청크를 4개(`0x428` → `0x18` → `0x418` → `0x18`) 할당한다. 
 &nbsp;&nbsp;&nbsp;&nbsp;1\.1\. 이때 `0x18`(`g1`, `g2`)은 병합 방지를 위해 중간중간 작은 사이즈의 청크를 끼워 준다.
 
@@ -105,7 +106,7 @@ Large bin은 여러 크기의 청크를 하나의 bin에서 관리한다. 따라
   printf("               and one chunk in unsorted bin [p2] (%p)\n",p2-2);
 
 ```
-
+{: data-lines="58"}
 2\. 크기가 `0x428`인 청크(`p1`)를 해제하고 크기가 `0x438`인 `g3`를 할당한다. 
 &nbsp;&nbsp;&nbsp;&nbsp;2.1. `g3`이 더 커야 `p1`이 통째로 large bin에 들어간다. 작으면 청크가 분할되고 unsorted bin에 남는다.
 3\. `p2`를 해제한다.
@@ -125,6 +126,7 @@ Large bin은 여러 크기의 청크를 하나의 bin에서 관리한다. 따라
   printf("  the modified p1->bk_nextsize does not trigger any error\n");
   printf("Upon inserting [p2] (%p) into largebin, [p1](%p)->bk_nextsize->fd_nextsize is overwritten to address of [p2] (%p)\n", p2-2, p1-2, p2-2);
 ```
+{: data-lines="72"}
 4\. `p1`의 `bk_nextsize`를 `target-0x20`으로 변조한다.
 5\. 크기가 `0x438`인 `g4`를 할당한다.
 &nbsp;&nbsp;&nbsp;&nbsp;5.1. 이 과정에서 아까 해제한 `p2`가 large bin으로 들어간다.
@@ -140,13 +142,13 @@ Large bin은 여러 크기의 청크를 하나의 bin에서 관리한다. 따라
 
   assert((size_t)(p2-2) == target);
 ```
+{: data-lines="85"}
 6\. 결론적으로 **스택에 존재하는 `target`이 `p2`의 주소로 overwrite된다!**
 
 ## `malloc()` 정적 분석
 이 과정을 이해하기 위해 먼저 청크가 large bin에 삽입되는 과정을 이해할 필요가 있다.
 
-앞서 언급했듯, 해제된 청크가 large bin에 저장되는 것은 `free()` 시가 아니라 `malloc()` 시에 일어난다.
-glibc의 `_int_malloc()`을 살펴보며 large bin에 해제된 청크가 삽입되는 과정을 분석해 보자.
+앞서 언급했듯, 해제된 청크가 large bin에 저장되는 것은 `free()` 시가 아니라 `malloc()` 시에 일어난다. [glibc](https://elixir.bootlin.com/glibc/glibc-2.39/source/malloc/malloc.c)의 `_int_malloc()`을 살펴보며 large bin에 해제된 청크가 삽입되는 과정을 분석해 보자.
 
 ```c
 /* place chunk in bin */
@@ -217,9 +219,10 @@ victim->fd = fwd;
 fwd->bk = victim;
 bck->fd = victim;
 ```
+{: data-lines="4159"}
 Large bin에 새 청크를 추가하는 동작에 관한 코드는 위와 같다.
 
-**Lines 1~13**
+**Lines 4159~4171**
 ```c
 /* place chunk in bin */
 
@@ -235,27 +238,30 @@ else
     bck = bin_at (av, victim_index);
     fwd = bck->fd;
 ```
+{: data-lines="4159"}
 먼저, 해제되는 청크의 사이즈를 `in_smallbin_range (size)`로 확인해 해제될 청크가 small bin에 들어갈지 large bin에 들어갈지 검사한다. 우리는 Largebin Attack을 살펴볼 것이니, `else` 이하만 보면 된다.
 
-**Lines 9~21**
+**Lines 4167~4178**
 ```c
-          else
-            {
-              victim_index = largebin_index (size);
-              bck = bin_at (av, victim_index);
-              fwd = bck->fd;
-              /* maintain large bins in sorted order */
-              if (fwd != bck)
-                {
-                  /* Or with inuse bit to speed comparisons */
-                  size |= PREV_INUSE;
-                  /* if smaller than smallest, bypass loop below */
-                  assert (chunk_main_arena (bck->bk));
+else
+{
+    victim_index = largebin_index (size);
+    bck = bin_at (av, victim_index);
+    fwd = bck->fd;
+    
+    /* maintain large bins in sorted order */
+    if (fwd != bck)
+        {
+        /* Or with inuse bit to speed comparisons */
+        size |= PREV_INUSE;
+        /* if smaller than smallest, bypass loop below */
+        assert (chunk_main_arena (bck->bk));
 ```
+{: data-lines="4167"}
 이 부분을 보면, 현재 large bin에 존재하는 청크 중 가장 작은 청크보다 더 작은 청크를 삽입할 것인지 검사한다. 
 이 부분의 결과에 따라서 실행하게 되는 코드가 조금 달라진다. 우선 그렇지 않은 경우, 즉 일반적인 청크 삽입 case를 먼저 살펴보자.
 
-**Lines 34~56**
+**Lines 4192~4214**
 ```c
             assert (chunk_main_arena (fwd));
             while ((unsigned long) size < chunksize_nomask (fwd))
@@ -281,6 +287,7 @@ else
             if (bck->fd != fwd)
                 malloc_printerr ("malloc(): largebin double linked list corrupted (bk)");
 ```
+{: data-lines="4192"}
 여기에서는 가장 먼저 청크를 삽입할 적당한 위치를 탐색하기 위해 `while`문을 돌며 새 청크가 들어갈 size의 위치를 찾는다. 
 만약 같은 크기의 청크가 이미 존재한다면 두 번째 포지션에 삽입하고, 같은 크기의 청크가 없다면 `**_nextsize` 체인에 새 노드를 연결한다. 
 이때 두 번째 포지션에 삽입하는 것은 이전에 이미 정해진 대표 노드(?)를 바꾸지 않기 위함이다.
@@ -291,7 +298,7 @@ else
 
 이 무결성 검사를 통해 연결 리스트가 깨지지 않았는지(포인터가 임의로 조작되지는 않았는지) 검사한다.
 
-**Lines 22~31**
+**Lines 4180~4189**
 ```c
         if ((unsigned long) (size)
     < (unsigned long) chunksize_nomask (bck->bk))
@@ -304,17 +311,19 @@ else
             fwd->fd->bk_nextsize = victim->bk_nextsize->fd_nextsize = victim;
             }
 ```
+{: data-lines="4180"}
 요 부분이 Largebin Attack의 핵심이다. 앞서 살펴본 기본적인 루틴이 아닌, <u>현재의 large bin에서 가장 작은 청크가 삽입되는</u> 다소 특수한 케이스이기 때문이다.
 이 부분에는 앞서 포함되어 있었던 무결성 검사가 없다. 즉, 이 말은 large bin에 가장 작은 사이즈의 청크를 삽입해 검사를 우회할 수 있다는 뜻이다. 👍
 
-**Lines 59~60**
+**Lines 4217~4218**
 ```c
     else
         victim->fd_nextsize = victim->bk_nextsize = victim;
 ```
+{: data-lines="4217"}
 이 부분은 large bin이 비어있는 경우에 실행된다. 그래서 `**_nextsize`가 자기 자신을 가리키도록 초기화한다.
 
-**Lines 63~67**
+**Lines 4221~4225**
 ```c
 mark_bin (av, victim_index);
 victim->bk = bck;
@@ -322,6 +331,7 @@ victim->fd = fwd;
 fwd->bk = victim;
 bck->fd = victim;
 ```
+{: data-lines="4221"}
 여기는 small bin과 large bin 둘 다 공통되는 부분으로, `bck`와 `fwd` 사이에 청크를 `fd`, `bk` 연결 리스트로 삽입한다.
 
 ## 그래서 이게 왜 되는데
@@ -348,4 +358,3 @@ large bin에 위치하는 청크의 `bk_nextsize`가 `target-0x20`을 가리키�
 ---
 처음 쓸 땐 걍 가볍게 쓰려고 했는데... 쓰다 보니 각잡고 써 버렸다... ^^
 오랜만에 libc 코드도 뜯어보고 여러모로 재미있는 경험이었음 큭큭
-
